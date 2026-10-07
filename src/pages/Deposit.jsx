@@ -1,29 +1,67 @@
+import { useState, useContext } from "react";
+import { BankContext } from "../context/BankContext";
+import "../styles/Form.css";
+
 function Deposit() {
+  const [amount, setAmount] = useState("");
+
+  const {
+    balance,
+    setBalance,
+    transactions,
+    setTransactions,
+    fraudScore,
+    setFraudScore,
+    alerts,
+    setAlerts,
+  } = useContext(BankContext);
+
+  const handleDeposit = () => {
+    const depositAmount = Number(amount);
+
+    if (depositAmount <= 0) {
+      alert("Enter a valid amount");
+      return;
+    }
+
+    if (depositAmount > 50000) {
+      alert("⚠ High Value Deposit Detected");
+
+      setFraudScore(fraudScore + 10);
+
+      setAlerts([
+        ...alerts,
+        `⚠ High Deposit ₹${depositAmount}`,
+      ]);
+    }
+
+    setBalance(balance + depositAmount);
+
+    setTransactions([
+      ...transactions,
+      {
+        type: "Deposit",
+        amount: depositAmount,
+        date: new Date().toLocaleString(),
+      },
+    ]);
+
+    alert("Deposit Successful");
+    setAmount("");
+  };
+
   return (
-    <div style={{ padding: "40px" }}>
+    <div className="form-page">
       <h1>Deposit Money</h1>
 
       <input
         type="number"
         placeholder="Enter Amount"
-        style={{
-          padding: "10px",
-          width: "300px",
-          marginTop: "20px",
-        }}
+        value={amount}
+        onChange={(e) => setAmount(e.target.value)}
       />
 
-      <br /><br />
-
-      <button
-        style={{
-          padding: "10px 20px",
-          background: "#2563eb",
-          color: "white",
-          border: "none",
-          borderRadius: "5px",
-        }}
-      >
+      <button onClick={handleDeposit}>
         Deposit
       </button>
     </div>

@@ -1,6 +1,9 @@
+import { useNavigate } from "react-router-dom";
 import "../styles/Login.css";
-
+import { Link } from "react-router-dom";
 function Login() {
+  const navigate = useNavigate();
+
   return (
     <div className="login-container">
       <div className="login-card">
@@ -21,9 +24,17 @@ function Login() {
           className="input-field"
         />
 
-        <button className="login-btn">
+        <button
+          className="login-btn"
+          onClick={() => navigate("/dashboard")}
+        >
           Login
         </button>
+        <Link to="/register">
+  <button className="login-btn">
+    Create New Account
+  </button>
+</Link>
 
         <div className="register-link">
           Don't have an account?
